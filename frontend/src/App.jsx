@@ -1,27 +1,19 @@
 import Editor from "@monaco-editor/react";
+import BaseEditor from "./components/BaseEditor";
+import { useState } from "react";
 
 function App() {
-
+    const [content, setContent] = useState(`kjsbndkdjfnjkdsnfkjnaskjdfjnsdjknfkjsn
+        
+asdfas
+asdfsad
+asdfsdf
+asdfsadadkjfand`)
     return (
         <div className="flex flex-col items-center gap-8 h-screen p-8 bg-[#2c2025ee]">
-            <Editor
-                height="45vh"
-                width="80vw"
+            <BaseEditor
                 defaultLanguage="javascript"
-                defaultValue="// some comment"
-                // onMount={handleEditorDidMount}
-                theme="vs-dark"
-                options={{
-                    readOnly: true,
-                }}
-            />
-            <Editor
-                height="40vh"
-                width="80vw"
-                defaultLanguage="javascript"
-                defaultValue="// some comment"
-                // onMount={handleEditorDidMount}
-                theme="vs-dark"
+                defaultValue={content}
             />
         </div>
     );

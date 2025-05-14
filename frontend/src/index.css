@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* styles.css */
+.highlighted-text {
+    background-color: yellow; /* or any color */
+    color: red; /* or any text color */
+}
