@@ -12,8 +12,11 @@ function BaseEditor({
 }) {
     const editorRef = useRef(null);
     const monacoRef = useRef(null);
-    const decorationsRef = useRef([]);
-    const allDecoration = [];
+    const highLightIds = {};
+
+    function generateKey(num1, num2) {
+        return `${num1}_${num2}`;
+    }
 
     function handleEditorDidMount(editor, monaco) {
         editorRef.current = editor;
@@ -22,6 +25,7 @@ function BaseEditor({
 
     function addHighlight(lineNumber, colNumber) {
         const monaco = monacoRef.current;
+        const editor = editorRef.current;
 
         const range = new monaco.Range(
             lineNumber,
@@ -37,36 +41,25 @@ function BaseEditor({
             },
         };
 
-        allDecoration.push(decoration);
-        triggerHighlight();
+        const key = generateKey(lineNumber, colNumber);
+        const [id] = editor.deltaDecorations([], [decoration]);
+        highLightIds[key] = id;
+        console.log(id);
     }
 
     function removeHighlight(lineNumber, colNumber) {
-        console.log(allDecoration);
+        const editor = editorRef.current;
 
-        const index = allDecoration.findIndex(
-            (decoration) =>
-                decoration.range.startLineNumber === lineNumber &&
-                decoration.range.startColumn === colNumber
-        );
+        const key = generateKey(lineNumber, colNumber);
 
-        if (index === -1) {
+        if (!Object.keys(highLightIds).includes(key)) {
             console.log(
                 "Trying to remove highlight from a charachtor that isn't already highlighted"
             );
             return;
         }
-        allDecoration.splice(index, 1);
-        triggerHighlight();
-    }
 
-    function triggerHighlight() {
-        const editor = editorRef.current;
-
-        decorationsRef.current = editor.deltaDecorations(
-            decorationsRef.current,
-            allDecoration
-        );
+        editor.deltaDecorations([highLightIds[key]], []);
     }
 
     return (
