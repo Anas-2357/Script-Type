@@ -41,6 +41,25 @@ function BaseEditor({
         triggerHighlight();
     }
 
+    function removeHighlight(lineNumber, colNumber) {
+        console.log(allDecoration);
+
+        const index = allDecoration.findIndex(
+            (decoration) =>
+                decoration.range.startLineNumber === lineNumber &&
+                decoration.range.startColumn === colNumber
+        );
+
+        if (index === -1) {
+            console.log(
+                "Trying to remove highlight from a charachtor that isn't already highlighted"
+            );
+            return;
+        }
+        allDecoration.splice(index, 1);
+        triggerHighlight();
+    }
+
     function triggerHighlight() {
         const editor = editorRef.current;
 
