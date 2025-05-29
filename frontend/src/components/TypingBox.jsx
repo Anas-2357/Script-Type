@@ -48,11 +48,26 @@ function TypingBox() {
 
     function handleKeyDown(e) {
         const updatedState = [...charState];
-        const index = currIndex;
+        var index = currIndex;
         if (currIndex) removeCursor(index, updatedState);
 
         const typedChar = e.key;
         const charToType = updatedState[index].char;
+
+        if (typedChar === "Tab") {
+            e.preventDefault();
+            if (index === 0) return;
+            if (
+                updatedState[index - 1].char === "\n" &&
+                updatedState[index].char === " "
+            ) {
+                while (updatedState[index].char === " ") index++;
+                addCursor(index, updatedState);
+                setCurrIndex(index);
+                setCharState(updatedState);
+                return;
+            }
+        }
 
         if (typedChar === "Backspace") {
             if (index === 0) return;
