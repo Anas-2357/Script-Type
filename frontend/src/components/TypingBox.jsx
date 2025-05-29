@@ -50,15 +50,16 @@ function TypingBox() {
         inputRef.current?.focus();
     }, []);
 
-    function handleChange(e) {
-        const typedChar = e.target.value[currIndex];
+    function handleKeyDown(e) {
+        const typedChar = e.key
         const charToType = currIndex ? charState[currIndex + 1].char : charState[currIndex].char;
         currIndex && removeCursor();
 
-        console.log(typedChar);
-        console.log(charToType);
+        // console.log(typedChar);
+        // console.log(charToType);
+        // console.log(charState)
 
-        if (typedChar === undefined) {
+        if (typedChar === "Backspace") {
             charState[currIndex - 1].status = "normal";
             setCurrIndex((prev) => prev - 1);
             addCursor(currIndex - 1);
@@ -75,7 +76,7 @@ function TypingBox() {
             <input
                 ref={inputRef}
                 type="text"
-                onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 className="absolute opacity-0 pointer-events-none"
                 autoComplete="off"
                 spellCheck="false"
