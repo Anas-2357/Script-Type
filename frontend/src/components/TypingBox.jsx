@@ -54,24 +54,40 @@ function TypingBox() {
         const typedChar = e.key;
         const charToType = updatedState[index].char;
 
-        // console.log(typedChar);
-        // console.log(charToType);
-        // console.log(currIndex);
-        console.log(updatedState);
-
         if (typedChar === "Backspace") {
             if (index === 0) return;
             updatedState[index - 1].status = "normal";
             addCursor(index - 1, updatedState);
             setCurrIndex(index - 1);
             setCharState(updatedState);
-        } else {
-            updatedState[index].status =
-                charToType === typedChar ? "correct" : "inCorrect";
-            addCursor(index + 1, updatedState);
-            setCurrIndex(index + 1);
-            setCharState(updatedState);
+            return;
         }
+        if (charToType === "\n") {
+            if (typedChar === "Enter") {
+                addCursor(index + 1, updatedState);
+                setCurrIndex(index + 1);
+                setCharState(updatedState);
+            }
+            return;
+        }
+        if (charToType === " ") {
+            if (typedChar === " ") {
+                addCursor(index + 1, updatedState);
+                setCurrIndex(index + 1);
+                setCharState(updatedState);
+            }
+            return;
+        }
+
+        if (typedChar.length !== 1) {
+            return;
+        }
+
+        updatedState[index].status =
+            charToType === typedChar ? "correct" : "inCorrect";
+        addCursor(index + 1, updatedState);
+        setCurrIndex(index + 1);
+        setCharState(updatedState);
     }
 
     return (
