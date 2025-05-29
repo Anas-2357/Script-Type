@@ -32,16 +32,12 @@ function TypingBox() {
         setCharState((prev) => [...prev, ...state]);
     }
 
-    function addCursor(index) {
-        const currentState = charState;
-        currentState.splice(index, 0, { char: "", status: "blink" });
-        setCharState(currentState);
+    function addCursor(index, updatedState) {
+        updatedState.splice(index, 0, { char: "", status: "blink" });
     }
 
-    function removeCursor() {
-        const currentState = charState;
-        currentState.splice(currIndex, 1);
-        setCharState(currentState);
+    function removeCursor(index, updatedState) {
+        updatedState.splice(index, 1);
     }
 
     useEffect(() => {
@@ -51,23 +47,30 @@ function TypingBox() {
     }, []);
 
     function handleKeyDown(e) {
-        const typedChar = e.key
-        const charToType = currIndex ? charState[currIndex + 1].char : charState[currIndex].char;
-        currIndex && removeCursor();
+        const updatedState = [...charState];
+        const index = currIndex;
+        if (currIndex) removeCursor(index, updatedState);
+
+        const typedChar = e.key;
+        const charToType = updatedState[index].char;
 
         // console.log(typedChar);
         // console.log(charToType);
-        // console.log(charState)
+        // console.log(currIndex);
+        console.log(updatedState);
 
         if (typedChar === "Backspace") {
-            charState[currIndex - 1].status = "normal";
-            setCurrIndex((prev) => prev - 1);
-            addCursor(currIndex - 1);
+            if (index === 0) return;
+            updatedState[index - 1].status = "normal";
+            addCursor(index - 1, updatedState);
+            setCurrIndex(index - 1);
+            setCharState(updatedState);
         } else {
-            charState[currIndex].status =
+            updatedState[index].status =
                 charToType === typedChar ? "correct" : "inCorrect";
-            setCurrIndex((prev) => prev + 1);
-            addCursor(currIndex + 1);
+            addCursor(index + 1, updatedState);
+            setCurrIndex(index + 1);
+            setCharState(updatedState);
         }
     }
 
