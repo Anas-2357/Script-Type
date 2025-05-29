@@ -1,19 +1,8 @@
+import data from "../constants/data";
 import { useEffect, useRef, useState } from "react";
 
-const paragraph = `function factorial(n) {
-  if (n === 0 || n === 1) {
-    return 1;
-  }
-  let result = 1;
-  for (let i = 2; i <= n; i++) {
-    result *= i;
-  }
-  return result;
-  console.log(factorial(5));
-}
-`;
-
-function TypingBox() {
+function TypingBox({ language }) {
+    const paragraph = data[language][0];
     const [charState, setCharState] = useState([]);
     const inputRef = useRef(null);
     const [currIndex, setCurrIndex] = useState(0);
@@ -29,7 +18,8 @@ function TypingBox() {
             char: data,
             status: "normal",
         }));
-        setCharState((prev) => [...prev, ...state]);
+        setCharState(state);
+        setCurrIndex(0);
     }
 
     function addCursor(index, updatedState) {
@@ -44,7 +34,6 @@ function TypingBox() {
         setState();
 
         const focusInput = () => {
-            console.log("Clicked");
             setTimeout(() => {
                 inputRef.current?.focus();
             }, 0);
@@ -53,7 +42,7 @@ function TypingBox() {
         focusInput();
 
         document.addEventListener("mousedown", focusInput);
-    }, []);
+    }, [paragraph]);
 
     function handleKeyDown(e) {
         const updatedState = [...charState];
@@ -127,11 +116,13 @@ function TypingBox() {
             />
             {charState.map((data, index) =>
                 data.char === "\n" ? (
-                    <br />
+                    <br key={index} />
                 ) : data.char === " " ? (
-                    <span>&nbsp;</span>
+                    <span key={index}>&nbsp;</span>
                 ) : (
-                    <span className={classes[data.status]}>{data.char}</span>
+                    <span key={index} className={classes[data.status]}>
+                        {data.char}
+                    </span>
                 )
             )}
         </div>

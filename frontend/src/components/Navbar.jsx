@@ -1,13 +1,13 @@
 import React from "react";
-
-const languages = ["Javascript", "HTML", "CSS"];
+import data from "../constants/data";
 
 function Navbar({ language, setLanguage }) {
     return (
         <nav className="flex gap-3 py-1 px-8 rounded-md w-auto text-sm">
-            {languages.map((data, index) => {
+            {Object.keys(data).map((data, index) => {
                 return (
                     <button
+                        key={index}
                         onClick={() => setLanguage(data)}
                         className={`p-2 hover:text-gray-300 active:opacity-30 transition-all duration-300 ${
                             language === data ? "text-purple-500" : ""
