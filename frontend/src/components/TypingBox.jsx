@@ -58,7 +58,8 @@ function TypingBox() {
             e.preventDefault();
             if (index === 0) return;
             if (
-                updatedState[index - 1].char === "\n" &&
+                updatedState[index - 1].char === "\n" || 
+                updatedState[index - 1].char === " " &&
                 updatedState[index].char === " "
             ) {
                 while (updatedState[index].char === " ") index++;
