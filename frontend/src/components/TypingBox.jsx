@@ -21,6 +21,7 @@ function TypingBox() {
         normal: "",
         correct: "text-green-100",
         inCorrect: "text-red-500",
+        blink: "border border-[1.5px] absolute translate-x-[-1px] h-[1.4em] animate-blink",
     };
 
     function setState() {
@@ -31,6 +32,18 @@ function TypingBox() {
         setCharState((prev) => [...prev, ...state]);
     }
 
+    function addCursor(index) {
+        const currentState = charState;
+        currentState.splice(index, 0, { char: "", status: "blink" });
+        setCharState(currentState);
+    }
+
+    function removeCursor() {
+        const currentState = charState;
+        currentState.splice(currIndex, 1);
+        setCharState(currentState);
+    }
+
     useEffect(() => {
         setState();
 
@@ -39,17 +52,21 @@ function TypingBox() {
 
     function handleChange(e) {
         const typedChar = e.target.value[currIndex];
-        const charToType = charState[currIndex].char;
+        const charToType = currIndex ? charState[currIndex + 1].char : charState[currIndex].char;
+        currIndex && removeCursor();
 
-        console.log(e.nativeEvent.inputType);
+        console.log(typedChar);
+        console.log(charToType);
 
-        if (e.nativeEvent.inputType === "deleteContentBackward") {
+        if (typedChar === undefined) {
             charState[currIndex - 1].status = "normal";
             setCurrIndex((prev) => prev - 1);
+            addCursor(currIndex - 1);
         } else {
             charState[currIndex].status =
                 charToType === typedChar ? "correct" : "inCorrect";
             setCurrIndex((prev) => prev + 1);
+            addCursor(currIndex + 1);
         }
     }
 
