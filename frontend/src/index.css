@@ -4,4 +4,6 @@
 
 body {
   @apply font-mono;
+  background-color: #3f3f3f;
+  color: #8f8f8f;
 }
