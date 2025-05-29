@@ -2,8 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: #2a2a2a;
+  --color-secondary: #212122;
+  --color-primary-text: #8f8f8f
+}
+
 body {
   @apply font-mono;
-  background-color: #3f3f3f;
+  background-color: var(--color-primary);
   color: #8f8f8f;
+}
+
+nav {
+    background-color: var(--color-secondary);
 }

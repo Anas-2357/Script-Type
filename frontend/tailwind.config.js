@@ -15,6 +15,10 @@ export default {
             animation: {
                 blink: "blink 1s step-start infinite",
             },
+            colors: {
+                primary: "var(--color-primary)",
+                secondary: "var(--color-secondary)",
+            },
         },
     },
     plugins: [],

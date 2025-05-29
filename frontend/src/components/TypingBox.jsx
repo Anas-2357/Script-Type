@@ -107,7 +107,7 @@ function TypingBox() {
     }
 
     return (
-        <div className="text-xl">
+        <div className="text-2xl w-full">
             <input
                 ref={inputRef}
                 type="text"
