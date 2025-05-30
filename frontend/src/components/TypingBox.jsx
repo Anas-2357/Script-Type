@@ -29,7 +29,7 @@ function TypingBox({ language, subLanguage }) {
         focusInput();
 
         document.addEventListener("mousedown", focusInput);
-    }, [paragraph, subLanguage]);
+    }, [language, subLanguage]);
 
     // Initializing the charState
 
@@ -42,16 +42,15 @@ function TypingBox({ language, subLanguage }) {
             if (currentChar === "ï") {
                 if (subLanguage === "") {
                     backtrackSpaces(tempArray);
-                    return;
-                }
-
-                const subLangSelected =
-                    data[language]["subLanguage"][subLanguage][subLangIdx];
-                for (let i = 0; i < subLangSelected.length; i++) {
-                    tempArray.push({
-                        char: subLangSelected[i],
-                        status: "normal",
-                    });
+                } else {
+                    const subLangSelected =
+                        data[language]["subLanguage"][subLanguage][subLangIdx];
+                    for (let i = 0; i < subLangSelected.length; i++) {
+                        tempArray.push({
+                            char: subLangSelected[i],
+                            status: "normal",
+                        });
+                    }
                 }
                 continue;
             }
