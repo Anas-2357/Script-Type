@@ -2,7 +2,7 @@ import data from "../constants/data";
 import { useEffect, useRef, useState } from "react";
 
 function TypingBox({ language }) {
-    const paragraph = data[language][0];
+    const paragraph = data[language].snippets[0];
     const [charState, setCharState] = useState([]);
     const inputRef = useRef(null);
     const [currIndex, setCurrIndex] = useState(0);

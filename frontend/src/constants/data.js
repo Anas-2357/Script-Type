@@ -1,8 +1,9 @@
 // ï    using this character to identify the place for conditional redering of secondary languages.
 //      For example: Tailwind code can be added in HTML only where this character is present
 
-const javascript = [
-    `function factorial(n) {
+const javascript = {
+    snippets: [
+        `function factorial(n) {
     if (n === 0 || n === 1) {
       return 1;
     }
@@ -14,10 +15,14 @@ const javascript = [
   }
 
   console.log(factorial(5));`,
-];
+    ],
+    subLanguage: {
+    },
+};
 
-const html = [
-    `<!DOCTYPE html>
+const html = {
+    snippets: [
+        `<!DOCTYPE html>
   <html>
     <head>
       <title>Sample Page</title>
@@ -27,10 +32,14 @@ const html = [
       <p>This is a sample HTML snippet.</p>
     </body>
   </html>`,
-];
+    ],
+    subLanguage: {
+    },
+};
 
-const css = [
-    `body {
+const css = {
+    snippets: [
+        `body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
   }
@@ -44,10 +53,14 @@ const css = [
     font-size: 16px;
     color: #666;
   }`,
-];
+    ],
+    subLanguage: {
+    },
+};
 
-const react = [
-    `import React from "react";
+const react = {
+    snippets: [
+        `import React from "react";
 
 function HelloWorld() {
   return (
@@ -59,7 +72,17 @@ function HelloWorld() {
 }
 
 export default HelloWorld;`,
-];
+    ],
+    subLanguage: {
+        Tailwind: [
+            `className="bg-blue-500 text-white px-4 py-2 rounded"`,
+            `className="flex items-center justify-between p-4"`,
+            `className="text-xl font-semibold text-gray-800"`,
+            `className="hover:bg-gray-200 transition duration-300"`,
+            `className="w-full max-w-md mx-auto mt-10"`,
+        ]
+    },
+};
 
 const data = {
     Javascript: javascript,
