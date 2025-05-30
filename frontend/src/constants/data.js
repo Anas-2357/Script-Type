@@ -64,9 +64,9 @@ const react = {
 
 function HelloWorld() {
   return (
-    <div>
-      <h1>Hello, React!</h1>
-      <p>This is a sample React component.</p>
+    <div ï>
+      <h1 ï>Hello, React!</h1>
+      <p ï>This is a sample React component.</p>
     </div>
   );
 }
@@ -75,11 +75,11 @@ export default HelloWorld;`,
     ],
     subLanguage: {
         Tailwind: [
-            `className="bg-blue-500 text-white px-4 py-2 rounded"`,
-            `className="flex items-center justify-between p-4"`,
-            `className="text-xl font-semibold text-gray-800"`,
-            `className="hover:bg-gray-200 transition duration-300"`,
-            `className="w-full max-w-md mx-auto mt-10"`,
+            `className="bg-blue-500 text-white px-4 py-2 rounded" `,
+            `className="flex items-center justify-between p-4" `,
+            `className="text-xl font-semibold text-gray-800" `,
+            `className="hover:bg-gray-200 transition duration-300" `,
+            `className="w-full max-w-md mx-auto mt-10" `,
         ]
     },
 };

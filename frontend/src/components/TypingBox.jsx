@@ -1,11 +1,12 @@
 import data from "../constants/data";
 import { useEffect, useRef, useState } from "react";
 
-function TypingBox({ language }) {
+function TypingBox({ language, subLanguage }) {
     const paragraph = data[language].snippets[0];
     const [charState, setCharState] = useState([]);
     const inputRef = useRef(null);
     const [currIndex, setCurrIndex] = useState(0);
+    const subLangIdx = 0;
     const classes = {
         normal: "",
         correct: "text-green-100",
@@ -28,21 +29,43 @@ function TypingBox({ language }) {
         focusInput();
 
         document.addEventListener("mousedown", focusInput);
-    }, [paragraph]);
+    }, [paragraph, subLanguage]);
 
     // Initializing the charState
 
     function setState() {
         const chars = paragraph.split("");
-        const state = [];
+        const tempArray = [];
 
         for (let i = 0; i < chars.length; i++) {
-            const data = chars[i];
-            state.push({ char: data, status: "normal" });
+            const currentChar = chars[i];
+            if (currentChar === "ï") {
+                if (subLanguage === "") {
+                    backtrackSpaces(tempArray);
+                    return;
+                }
+
+                const subLangSelected =
+                    data[language]["subLanguage"][subLanguage][subLangIdx];
+                for (let i = 0; i < subLangSelected.length; i++) {
+                    tempArray.push({
+                        char: subLangSelected[i],
+                        status: "normal",
+                    });
+                }
+                continue;
+            }
+            tempArray.push({ char: currentChar, status: "normal" });
         }
 
-        setCharState(state);
+        setCharState(tempArray);
         setCurrIndex(0);
+    }
+
+    function backtrackSpaces(tempArray) {
+        while (tempArray[tempArray.length - 1].char === " ") {
+            tempArray.pop();
+        }
     }
 
     // Logic for adding and removing dummy cursor
@@ -132,7 +155,7 @@ function TypingBox({ language }) {
     }
 
     return (
-        <div className="text-2xl w-full">
+        <div className="text-2xl w-full whitespace-nowrap overflow-x-auto">
             <input
                 ref={inputRef}
                 type="text"
