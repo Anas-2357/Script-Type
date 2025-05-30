@@ -28,7 +28,11 @@ function Navbar({ language, setLanguage, subLanguage, setSubLanguage }) {
                         (subLang, index) => (
                             <button
                                 key={index}
-                                onClick={() => setSubLanguage(subLang)}
+                                onClick={() => {
+                                    if (subLanguage === subLang)
+                                        setSubLanguage("");
+                                    else setSubLanguage(subLang);
+                                }}
                                 className={`p-2 hover:text-gray-300 active:opacity-30 transition-all duration-300 ${
                                     subLanguage === subLang
                                         ? "text-purple-500"
