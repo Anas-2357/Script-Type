@@ -13,22 +13,8 @@ function TypingBox({ language }) {
         blink: "border border-[1.5px] absolute translate-x-[-1px] h-[1.4em] animate-blink",
     };
 
-    function setState() {
-        const state = paragraph.split("").map((data) => ({
-            char: data,
-            status: "normal",
-        }));
-        setCharState(state);
-        setCurrIndex(0);
-    }
-
-    function addCursor(index, updatedState) {
-        updatedState.splice(index, 0, { char: "", status: "blink" });
-    }
-
-    function removeCursor(index, updatedState) {
-        updatedState.splice(index, 1);
-    }
+    // Reseting charState every time the paragraph is changed
+    // Adding event listener on document to trigger focus on input element on any click done by user
 
     useEffect(() => {
         setState();
@@ -44,6 +30,29 @@ function TypingBox({ language }) {
         document.addEventListener("mousedown", focusInput);
     }, [paragraph]);
 
+    // Initializing the charState
+
+    function setState() {
+        const state = paragraph.split("").map((data) => ({
+            char: data,
+            status: "normal",
+        }));
+        setCharState(state);
+        setCurrIndex(0);
+    }
+
+    // Logic for adding and removing dummy cursor
+
+    function addCursor(index, updatedState) {
+        updatedState.splice(index, 0, { char: "", status: "blink" });
+    }
+
+    function removeCursor(index, updatedState) {
+        updatedState.splice(index, 1);
+    }
+
+    // Main logic for key press
+
     function handleKeyDown(e) {
         const updatedState = [...charState];
         var index = currIndex;
@@ -51,6 +60,8 @@ function TypingBox({ language }) {
 
         const typedChar = e.key;
         const charToType = updatedState[index].char;
+
+        // This logic helps cover all spaces on press of a 'Tab' key only if last char was ' ' or '\n'
 
         if (typedChar === "Tab") {
             e.preventDefault();
@@ -68,6 +79,8 @@ function TypingBox({ language }) {
             }
         }
 
+        // Return if index is 0 to prevent errors; otherwise, reduce index and simulate backspace
+
         if (typedChar === "Backspace") {
             if (index === 0) return;
             updatedState[index - 1].status = "normal";
@@ -76,6 +89,9 @@ function TypingBox({ language }) {
             setCharState(updatedState);
             return;
         }
+
+        // Prevent user from skipping a line without pressing 'Enter'
+
         if (charToType === "\n") {
             if (typedChar === "Enter") {
                 addCursor(index + 1, updatedState);
@@ -84,6 +100,9 @@ function TypingBox({ language }) {
             }
             return;
         }
+
+        // Prevent user from skipping a space without typing one
+
         if (charToType === " ") {
             if (typedChar === " ") {
                 addCursor(index + 1, updatedState);
@@ -93,9 +112,13 @@ function TypingBox({ language }) {
             return;
         }
 
+        // Ignore all non-essential key presses like shift, insert, delete, etc.
+
         if (typedChar.length !== 1) {
             return;
         }
+
+        // Advance cursor and apply appropriate styling based on typed character.
 
         updatedState[index].status =
             charToType === typedChar ? "correct" : "inCorrect";

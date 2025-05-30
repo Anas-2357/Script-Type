@@ -1,5 +1,8 @@
+// ï    using this character to identify the place for conditional redering of secondary languages.
+//      For example: Tailwind code can be added in HTML only where this character is present
+
 const javascript = [
-  `function factorial(n) {
+    `function factorial(n) {
     if (n === 0 || n === 1) {
       return 1;
     }
@@ -10,11 +13,11 @@ const javascript = [
     return result;
   }
 
-  console.log(factorial(5));`
+  console.log(factorial(5));`,
 ];
 
 const html = [
-  `<!DOCTYPE html>
+    `<!DOCTYPE html>
   <html>
     <head>
       <title>Sample Page</title>
@@ -23,11 +26,11 @@ const html = [
       <h1>Hello, World!</h1>
       <p>This is a sample HTML snippet.</p>
     </body>
-  </html>`
+  </html>`,
 ];
 
 const css = [
-  `body {
+    `body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
   }
@@ -40,14 +43,29 @@ const css = [
   p {
     font-size: 16px;
     color: #666;
-  }`
+  }`,
 ];
 
+const react = [
+    `import React from "react";
+
+function HelloWorld() {
+  return (
+    <div>
+      <h1>Hello, React!</h1>
+      <p>This is a sample React component.</p>
+    </div>
+  );
+}
+
+export default HelloWorld;`,
+];
 
 const data = {
     Javascript: javascript,
     HTML: html,
     CSS: css,
+    React: react,
 };
 
 export default data;
