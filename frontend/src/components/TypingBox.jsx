@@ -6,7 +6,7 @@ function TypingBox({ language, subLanguage }) {
     const [charState, setCharState] = useState([]);
     const inputRef = useRef(null);
     const [currIndex, setCurrIndex] = useState(0);
-    const subLangIdx = 0;
+    var subLangIdx = 0;
     const classes = {
         normal: "",
         correct: "text-green-100",
@@ -44,7 +44,7 @@ function TypingBox({ language, subLanguage }) {
                     backtrackSpaces(tempArray);
                 } else {
                     const subLangSelected =
-                        data[language]["subLanguage"][subLanguage][subLangIdx];
+                        data[language]["subLanguage"][subLanguage][subLangIdx++];
                     for (let i = 0; i < subLangSelected.length; i++) {
                         tempArray.push({
                             char: subLangSelected[i],
