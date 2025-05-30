@@ -154,7 +154,7 @@ function TypingBox({ language, subLanguage }) {
     }
 
     return (
-        <div className="text-2xl w-full whitespace-nowrap overflow-x-auto">
+        <div className="text-xl/8 w-full whitespace-nowrap overflow-x-auto">
             <input
                 ref={inputRef}
                 type="text"

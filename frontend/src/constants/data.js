@@ -43,12 +43,10 @@ const css = {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
   }
-
   h1 {
     color: #333;
     text-align: center;
   }
-
   p {
     font-size: 16px;
     color: #666;
@@ -65,8 +63,12 @@ const react = {
 function HelloWorld() {
   return (
     <div ï>
-      <h1 ï>Hello, React!</h1>
-      <p ï>This is a sample React component.</p>
+      <h1 ï>
+        Hello, React!
+      </h1>
+      <p ï>
+        This is a sample React component.
+      </p>
     </div>
   );
 }
