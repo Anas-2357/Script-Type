@@ -33,10 +33,14 @@ function TypingBox({ language }) {
     // Initializing the charState
 
     function setState() {
-        const state = paragraph.split("").map((data) => ({
-            char: data,
-            status: "normal",
-        }));
+        const chars = paragraph.split("");
+        const state = [];
+
+        for (let i = 0; i < chars.length; i++) {
+            const data = chars[i];
+            state.push({ char: data, status: "normal" });
+        }
+
         setCharState(state);
         setCurrIndex(0);
     }
