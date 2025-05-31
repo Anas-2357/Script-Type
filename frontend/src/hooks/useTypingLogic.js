@@ -5,17 +5,26 @@ import { addCursor, removeCursor } from "../utils/cursorUtils";
 import useTrackingStore from "../store/useTrackingStore";
 
 function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
-    const paragraph = data[language].snippets[0];
+    const randomIndexRef = useRef(0);
+    const prevLanguageRef = useRef(language);
     const [charState, setCharState] = useState([]);
     const [currIndex, setCurrIndex] = useState(0);
     const [currentTime, setCurrentTime] = useState();
-    var currTimeRef = useRef();
+    const currTimeRef = useRef();
     const intervalRef = useRef(null);
 
     const trackTiming = useTrackingStore((state) => state.trackTiming);
 
-    // Setup paragraph state
     useEffect(() => {
+        // Update random index if language changes
+        if (prevLanguageRef.current !== language) {
+            randomIndexRef.current = Math.floor(
+                Math.random() * data[language].snippets.length
+            );
+            prevLanguageRef.current = language;
+        }
+
+        const paragraph = data[language].snippets[randomIndexRef.current];
         const { state } = prepareCharState(paragraph, language, subLanguage);
         setCharState(state);
         setCurrIndex(0);
@@ -39,7 +48,6 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
         }, 1000);
     }
 
-    // Handle key press
     function handleKeyDown(e) {
         const updatedState = [...charState];
         let index = currIndex;
@@ -49,12 +57,10 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
         const typedChar = e.key;
         const charToType = updatedState[index]?.char;
 
-        // Start timer on the first key press
         if (currTimeRef.current === undefined) {
             startTimer();
         }
 
-        // Tab key logic: skip spaces/line breaks
         if (typedChar === "Tab") {
             e.preventDefault();
             if (index === 0) return;
@@ -69,20 +75,13 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, true);
             }
-        }
-
-        // Backspace
-        else if (typedChar === "Backspace") {
+        } else if (typedChar === "Backspace") {
             if (index === 0) return;
             updatedState[index - 1].status = "normal";
             addCursor(index - 1, updatedState);
             setCurrIndex(index - 1);
             setCharState(updatedState);
-        }
-
-        // Skip if charToType is undefined
-        else if (!charToType) return;
-        // Prevent skipping line without Enter
+        } else if (!charToType) return;
         else if (charToType === "\n") {
             if (typedChar === "Enter") {
                 addCursor(index + 1, updatedState);
@@ -90,36 +89,25 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, true);
             } else {
-                // Prevent moving forward
                 addCursor(index, updatedState);
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, false);
             }
-        }
-
-        // Prevent skipping space without Space key
-        else if (charToType === " ") {
+        } else if (charToType === " ") {
             if (typedChar === " ") {
                 addCursor(index + 1, updatedState);
                 setCurrIndex(index + 1);
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, true);
             } else {
-                // Prevent moving forward
                 addCursor(index, updatedState);
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, false);
             }
-        }
-
-        // Ignore non-character keys like Shift, Ctrl
-        else if (typedChar.length !== 1) {
+        } else if (typedChar.length !== 1) {
             addCursor(index, updatedState);
             setCharState(updatedState);
-        }
-
-        // Normal character typing
-        else {
+        } else {
             updatedState[index].status =
                 typedChar === charToType ? "correct" : "inCorrect";
             addCursor(index + 1, updatedState);
@@ -128,7 +116,6 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
             trackTiming(currTimeRef.current, typedChar === charToType);
         }
 
-        // Set state when whole content is typed;
         if (index === updatedState.length - 2) {
             setIsSessionComplete(true);
         }
