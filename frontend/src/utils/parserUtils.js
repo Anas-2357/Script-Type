@@ -1,4 +1,4 @@
-import data from "../constants/data";
+import data from "./data";
 
 export function prepareCharState(paragraph, language, subLanguage) {
     const chars = paragraph.split("");

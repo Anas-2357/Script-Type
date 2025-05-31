@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import data from "../constants/data";
+import data from "../utils/data";
 import { prepareCharState } from "../utils/parserUtils";
 import { addCursor, removeCursor } from "../utils/cursorUtils";
 import useTrackingStore from "../store/useTrackingStore";

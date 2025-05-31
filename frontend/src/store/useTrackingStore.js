@@ -13,6 +13,7 @@ const useTrackingStore = create((set, get) => ({
         else arr[currTime].inCorrectChars += 1;
 
         set({ trackingArray: arr });
+        console.log(arr);
     },
     resetTracking: () => set({ trackingArray: [] })
 }));

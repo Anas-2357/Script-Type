@@ -1,5 +1,5 @@
 import React from "react";
-import data from "../constants/data";
+import data from "../utils/data";
 
 function Navbar({ language, setLanguage, subLanguage, setSubLanguage }) {
     const hasSubLanguages = Object.keys(data[language]?.subLanguage).length > 0;
