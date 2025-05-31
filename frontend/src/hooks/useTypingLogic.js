@@ -4,7 +4,7 @@ import { prepareCharState } from "../utils/parserUtils";
 import { addCursor, removeCursor } from "../utils/cursorUtils";
 import useTrackingStore from "../store/useTrackingStore";
 
-function useTypingLogic(language, subLanguage, inputRef) {
+function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
     const paragraph = data[language].snippets[0];
     const [charState, setCharState] = useState([]);
     const [currIndex, setCurrIndex] = useState(0);
@@ -93,6 +93,7 @@ function useTypingLogic(language, subLanguage, inputRef) {
                 // Prevent moving forward
                 addCursor(index, updatedState);
                 setCharState(updatedState);
+                trackTiming(currTimeRef.current, false);
             }
         }
 
@@ -107,6 +108,7 @@ function useTypingLogic(language, subLanguage, inputRef) {
                 // Prevent moving forward
                 addCursor(index, updatedState);
                 setCharState(updatedState);
+                trackTiming(currTimeRef.current, false);
             }
         }
 
@@ -124,6 +126,11 @@ function useTypingLogic(language, subLanguage, inputRef) {
             setCurrIndex(index + 1);
             setCharState(updatedState);
             trackTiming(currTimeRef.current, typedChar === charToType);
+        }
+
+        // Set state when whole content is typed;
+        if (index === updatedState.length - 2) {
+            setIsSessionComplete(true);
         }
     }
 
