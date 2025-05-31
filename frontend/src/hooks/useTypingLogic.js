@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import data from "../constants/data";
 import { prepareCharState } from "../utils/parserUtils";
 import { addCursor, removeCursor } from "../utils/cursorUtils";
-import { trackTiming } from "../utils/trackTiming";
+import useTrackingStore from "../store/useTrackingStore";
 
 function useTypingLogic(language, subLanguage, inputRef) {
     const paragraph = data[language].snippets[0];
@@ -10,6 +10,9 @@ function useTypingLogic(language, subLanguage, inputRef) {
     const [currIndex, setCurrIndex] = useState(0);
     const [currentTime, setCurrentTime] = useState();
     var currTimeRef = useRef();
+    const intervalRef = useRef(null);
+
+    const trackTiming = useTrackingStore((state) => state.trackTiming);
 
     // Setup paragraph state
     useEffect(() => {
@@ -23,13 +26,14 @@ function useTypingLogic(language, subLanguage, inputRef) {
 
         return () => {
             document.removeEventListener("mousedown", focusInput);
+            clearInterval(intervalRef.current);
         };
     }, [language, subLanguage]);
 
     function startTimer() {
         setCurrentTime(0);
         currTimeRef.current = 0;
-        setInterval(() => {
+        intervalRef.current = setInterval(() => {
             setCurrentTime((prev) => prev + 1);
             currTimeRef.current = currTimeRef.current + 1;
         }, 1000);
@@ -86,7 +90,7 @@ function useTypingLogic(language, subLanguage, inputRef) {
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, true);
             } else {
-                // Prevent moving forvard
+                // Prevent moving forward
                 addCursor(index, updatedState);
                 setCharState(updatedState);
             }
