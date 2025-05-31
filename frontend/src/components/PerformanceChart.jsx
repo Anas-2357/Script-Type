@@ -9,6 +9,8 @@ import {
     CategoryScale,
     Legend,
     Filler,
+    LineController,
+    ScatterController,
 } from "chart.js";
 import useTrackingStore from "../store/useTrackingStore";
 import { useEffect } from "react";
@@ -21,7 +23,9 @@ ChartJS.register(
     Tooltip,
     CategoryScale,
     Legend,
-    Filler
+    Filler,
+    LineController,
+    ScatterController
 );
 
 function PerformanceChart({
