@@ -33,7 +33,7 @@ function useTypingLogic(language, subLanguage, inputRef) {
         const typedChar = e.key;
         const charToType = updatedState[index]?.char;
 
-        // --- Tab key logic: skip spaces/line breaks ---
+        // Tab key logic: skip spaces/line breaks
         if (typedChar === "Tab") {
             e.preventDefault();
             if (index === 0) return;
@@ -50,7 +50,7 @@ function useTypingLogic(language, subLanguage, inputRef) {
             }
         }
 
-        // --- Backspace ---
+        // Backspace
         if (typedChar === "Backspace") {
             if (index === 0) return;
             updatedState[index - 1].status = "normal";
@@ -60,43 +60,43 @@ function useTypingLogic(language, subLanguage, inputRef) {
             return;
         }
 
-        // --- Skip if charToType is undefined ---
+        // Skip if charToType is undefined
         if (!charToType) return;
 
-        // --- Prevent skipping line without Enter ---
+        // Prevent skipping line without Enter
         if (charToType === "\n") {
             if (typedChar === "Enter") {
                 addCursor(index + 1, updatedState);
                 setCurrIndex(index + 1);
                 setCharState(updatedState);
             } else {
-                addCursor(index, updatedState); // Stay on the same
+                addCursor(index, updatedState);
                 setCharState(updatedState);
             }
             return;
         }
 
-        // --- Prevent skipping space without Space key ---
+        // Prevent skipping space without Space key
         if (charToType === " ") {
             if (typedChar === " ") {
                 addCursor(index + 1, updatedState);
                 setCurrIndex(index + 1);
                 setCharState(updatedState);
             } else {
-                addCursor(index, updatedState); // Don't move
+                addCursor(index, updatedState);
                 setCharState(updatedState);
             }
             return;
         }
 
-        // --- Ignore non-character keys like Shift, Ctrl ---
+        // Ignore non-character keys like Shift, Ctrl
         if (typedChar.length !== 1) {
             addCursor(index, updatedState);
             setCharState(updatedState);
             return;
         }
 
-        // --- Normal character typing ---
+        // Normal character typing
         updatedState[index].status =
             typedChar === charToType ? "correct" : "inCorrect";
         addCursor(index + 1, updatedState);
