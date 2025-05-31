@@ -10,7 +10,7 @@ const classes = {
 
 function TypingBox({ language, subLanguage }) {
     const inputRef = useRef(null);
-    const { charState, handleKeyDown } = useTypingLogic(
+    const { charState, handleKeyDown, currentTime } = useTypingLogic(
         language,
         subLanguage,
         inputRef
@@ -18,6 +18,7 @@ function TypingBox({ language, subLanguage }) {
 
     return (
         <div className="text-xl/8 w-full whitespace-nowrap overflow-x-auto">
+            <p className="text-purple-500">{currentTime}</p>
             <input
                 ref={inputRef}
                 type="text"
