@@ -24,7 +24,14 @@ ChartJS.register(
     Filler
 );
 
-function PerformanceChart({ setWpm }) {
+function PerformanceChart({
+    setWpm,
+    setConsistency,
+    setAcceptanceRatio,
+    setTime,
+    setCorrectChars,
+    setInCorrectChars
+}) {
     const trackingArray = useTrackingStore((state) => state.trackingArray);
 
     const labels = trackingArray.map((_, i) => `${i}s`);
@@ -32,7 +39,12 @@ function PerformanceChart({ setWpm }) {
     const incorrectPoints = [];
     let totalCorrect = 0;
 
+    let correctChars = 0;
+    let inCorrectChars = 0;
+
     trackingArray.forEach((entry, i) => {
+        correctChars += entry.correctChars;
+        inCorrectChars += entry.inCorrectChars;
         const currCorrect = entry.correctChars;
         totalCorrect += currCorrect;
         const currAvgWPM = (totalCorrect / 5 / (i + 1)) * 60;
@@ -49,9 +61,32 @@ function PerformanceChart({ setWpm }) {
 
     useEffect(() => {
         if (avgWPM.length > 0) {
-            setWpm(avgWPM[avgWPM.length - 1].toFixed(0));
+            const finalWpm = avgWPM[avgWPM.length - 1].toFixed(0);
+            setWpm(finalWpm);
+
+            const mean = avgWPM.reduce((a, b) => a + b, 0) / avgWPM.length;
+            const variance =
+                avgWPM.reduce((sum, val) => sum + (val - mean) ** 2, 0) /
+                avgWPM.length;
+            const stdDev = Math.sqrt(variance);
+
+            const consistencyPercent =
+                mean > 0
+                    ? Math.max(0, Math.min(100, (1 - stdDev / mean) * 100))
+                    : 0;
+
+            setConsistency(consistencyPercent.toFixed(0));
+            setCorrectChars(correctChars);
+            setInCorrectChars(inCorrectChars);
+            setAcceptanceRatio(
+                (
+                    (correctChars / (correctChars + inCorrectChars)) *
+                    100
+                ).toFixed(0)
+            );
+            setTime(avgWPM.length - 1);
         }
-    }, [avgWPM, setWpm]);
+    }, [avgWPM, setWpm, setConsistency]);
 
     const data = {
         labels,
