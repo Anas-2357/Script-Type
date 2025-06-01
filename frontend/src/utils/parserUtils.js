@@ -15,7 +15,7 @@ export function prepareCharState(paragraph, language, subLanguage) {
                 backtrackSpaces(tempArray);
             } else {
                 const subSnippet =
-                    data[language]["subLanguage"][subLanguage][subLangIdx++] ||
+                    data[language.value]["subLanguage"][subLanguage][subLangIdx++] ||
                     "";
                 for (let j = 0; j < subSnippet.length; j++) {
                     tempArray.push({ char: subSnippet[j], status: "normal" });

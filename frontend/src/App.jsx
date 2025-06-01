@@ -4,7 +4,7 @@ import TypingBox from "./components/TypingBox";
 import Result from "./components/Result";
 
 function App() {
-    const [language, setLanguage] = useState("Javascript");
+    const [language, setLanguage] = useState({value: "Javascript", updatedAt: 0});
     const [subLanguage, setSubLanguage] = useState("");
     const [isSessionComplete, setIsSessionComplete] = useState(false);
     const [timeThreshold, setTimeThreshold] = useState(30);

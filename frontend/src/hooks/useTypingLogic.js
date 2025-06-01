@@ -12,26 +12,38 @@ function useTypingLogic(
     timeThreshold
 ) {
     const randomIndexRef = useRef(0);
-    const prevLanguageRef = useRef(language);
+    const prevLanguageRef = useRef(language.value);
     const [charState, setCharState] = useState([]);
     const [currIndex, setCurrIndex] = useState(0);
     const [currentTime, setCurrentTime] = useState();
     const currTimeRef = useRef();
     const intervalRef = useRef(null);
+    const prevUpdatedAtRef = useRef(0);
 
     const trackTiming = useTrackingStore((state) => state.trackTiming);
 
     useEffect(() => {
-        // Update random index if language changes
-        if (prevLanguageRef.current !== language) {
-            randomIndexRef.current = Math.floor(
-                Math.random() * data[language].snippets.length
+        // Update random index if language.value changes or if language remains same but language.updatedAt changes
+        if (
+            prevLanguageRef.current !== language.value ||
+            (prevLanguageRef.current === language.value &&
+                prevUpdatedAtRef.current !== language.updatedAt)
+        ) {
+            // Updating index while making sure new index is not equals to previous index
+            const currIndex = randomIndexRef.current;
+            var newIndex = Math.floor(
+                Math.random() * data[language.value].snippets.length
             );
-            prevLanguageRef.current = language;
+            while (currIndex === newIndex)
+                newIndex = Math.floor(
+                    Math.random() * data[language.value].snippets.length
+                );
+            randomIndexRef.current = newIndex;
+            prevLanguageRef.current = language.value;
         }
 
         // Initiate paragraph array with language snippet based on current language and index
-        const paragraph = data[language].snippets[randomIndexRef.current];
+        const paragraph = data[language.value].snippets[randomIndexRef.current];
 
         // Call prepareCharState function which will preapare a state array with correct objects, than push that to sharState
         const { state } = prepareCharState(paragraph, language, subLanguage);

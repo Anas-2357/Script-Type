@@ -9,7 +9,8 @@ function Navbar({
     timeThreshold,
     setTimeThreshold,
 }) {
-    const hasSubLanguages = Object.keys(data[language]?.subLanguage).length > 0;
+    const hasSubLanguages =
+        Object.keys(data[language.value]?.subLanguage).length > 0;
     const timeLimits = { Time: [15, 30, 60, 120] };
     return (
         <nav className="flex gap-3 py-1 px-8 rounded-md w-auto text-sm">
@@ -49,10 +50,10 @@ function Navbar({
                     <button
                         key={index}
                         onClick={() => {
-                            setLanguage(lang);
+                            setLanguage({ value: lang, updatedAt: Date.now() });
                         }}
                         className={`p-2 hover:text-gray-300 active:opacity-30 transition-all duration-300 ${
-                            language === lang ? "text-purple-500" : ""
+                            language.value === lang ? "text-purple-500" : ""
                         }`}
                     >
                         {lang}
@@ -63,7 +64,7 @@ function Navbar({
                 <>
                     <span className="border border-[2px] rounded-xl opacity-30 h-4 m-auto border-[var(--color-text)]"></span>
 
-                    {Object.keys(data[language]["subLanguage"]).map(
+                    {Object.keys(data[language.value]["subLanguage"]).map(
                         (subLang, index) => (
                             <button
                                 key={index}
