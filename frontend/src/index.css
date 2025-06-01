@@ -3,17 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #2a2a2a;
-  --color-secondary: #212122;
-  --color-primary-text: #8f8f8f
+    --color-primary: #2a2a2a;
+    --color-secondary: #212122;
+    --color-primary-text: #8f8f8f;
 }
 
 body {
-  @apply font-mono;
-  background-color: var(--color-primary);
-  color: #8f8f8f;
+    @apply font-mono;
+    background-color: var(--color-primary);
+    color: #8f8f8f;
 }
 
 nav {
     background-color: var(--color-secondary);
+}
+
+.hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* scroll-padding-left: 10rem; */
+    scroll-padding-right: 10rem;
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
 }

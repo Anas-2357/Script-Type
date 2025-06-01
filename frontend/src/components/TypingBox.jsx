@@ -24,7 +24,7 @@ function TypingBox({
     );
 
     return (
-        <div className="text-xl/8 w-full whitespace-nowrap overflow-x-auto">
+        <div className="text-xl/8 w-full whitespace-nowrap overflow-x-auto hide-scrollbar">
             <p className="text-purple-500">{currentTime}</p>
             <input
                 ref={inputRef}
