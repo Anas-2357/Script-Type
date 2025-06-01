@@ -89,6 +89,9 @@ function useTypingLogic(
     }
 
     function handleKeyDown(e) {
+        //Disable long press
+        if (e.repeat) return;
+
         const updatedState = [...charState];
         let index = currIndex;
 
@@ -178,6 +181,13 @@ function useTypingLogic(
         if (index === updatedState.length - 2) {
             setIsSessionComplete(true);
         }
+        requestAnimationFrame(() => {
+            document.querySelector(".scrollToThis")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest",
+            });
+        });
     }
 
     return { charState, handleKeyDown, currentTime };

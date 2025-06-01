@@ -5,7 +5,7 @@ const classes = {
     normal: "",
     correct: "text-green-100",
     inCorrect: "text-red-500",
-    blink: "border border-[1.5px] absolute translate-x-[-1px] h-[1.4em] animate-blink",
+    blink: "outline outline-[1.5px] translate-x-[-1px] h-[1.4em] animate-blink scrollToThis",
 };
 
 function TypingBox({
