@@ -38,7 +38,7 @@ function PerformanceChart({
 }) {
     const trackingArray = useTrackingStore((state) => state.trackingArray);
 
-    const labels = trackingArray.map((_, i) => `${i}s`);
+    const labels = trackingArray.map((_, i) => `${i}`);
     const avgWPM = [];
     const rawWPM = [];
     const incorrectPoints = [];
@@ -60,7 +60,7 @@ function PerformanceChart({
 
         if (entry.inCorrectChars > 0) {
             incorrectPoints.push({
-                x: `${i}s`,
+                x: `${i}`,
                 y: 0,
             });
         }
@@ -151,6 +151,10 @@ function PerformanceChart({
                     display: true,
                     text: "Time (s)",
                 },
+                ticks: {
+                    maxTicksLimit: 25,
+                },
+                beginAtZero: true,
             },
             y: {
                 title: {
