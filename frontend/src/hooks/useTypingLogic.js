@@ -40,6 +40,7 @@ function useTypingLogic(
                 );
             randomIndexRef.current = newIndex;
             prevLanguageRef.current = language.value;
+            prevUpdatedAtRef.current = language.updatedAt;
         }
 
         // Initiate paragraph array with language snippet based on current language and index
