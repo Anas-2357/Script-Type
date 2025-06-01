@@ -8,7 +8,9 @@ export function prepareCharState(paragraph, language, subLanguage) {
     for (let i = 0; i < chars.length; i++) {
         const currentChar = chars[i];
 
+        // Logic for sublanguage
         if (currentChar === "ï") {
+            // skip special char if subLanguage state is empty
             if (subLanguage === "") {
                 backtrackSpaces(tempArray);
             } else {
@@ -21,13 +23,14 @@ export function prepareCharState(paragraph, language, subLanguage) {
             }
             continue;
         }
-
+        // push correct object on every iteration
         tempArray.push({ char: currentChar, status: "normal" });
     }
 
     return { state: tempArray };
 }
 
+// Backtrack/pop all the space object until the last non space char
 function backtrackSpaces(arr) {
     while (arr[arr.length - 1]?.char === " ") {
         arr.pop();

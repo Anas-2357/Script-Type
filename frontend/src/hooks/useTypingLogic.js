@@ -24,11 +24,15 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
             prevLanguageRef.current = language;
         }
 
+        // Initiate paragraph array with language snippet based on current language and index
         const paragraph = data[language].snippets[randomIndexRef.current];
+
+        // Call prepareCharState function which will preapare a state array with correct objects, than push that to sharState
         const { state } = prepareCharState(paragraph, language, subLanguage);
         setCharState(state);
         setCurrIndex(0);
 
+        // Focus input initially and on every event on document using event listener
         const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
         focusInput();
         document.addEventListener("mousedown", focusInput);
@@ -39,6 +43,7 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
         };
     }, [language, subLanguage]);
 
+    // Integrate unlimited timer
     function startTimer() {
         setCurrentTime(0);
         currTimeRef.current = 0;
@@ -52,15 +57,19 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
         const updatedState = [...charState];
         let index = currIndex;
 
+        // Rmove cursor if index is not 0
         if (index) removeCursor(index, updatedState);
 
+        // Initiate and define typedChar and charToType variables
         const typedChar = e.key;
         const charToType = updatedState[index]?.char;
 
+        // Call startTimer function on the first key press
         if (currTimeRef.current === undefined) {
             startTimer();
         }
 
+        // Skip spaces based on previous chars if tab key is pressed
         if (typedChar === "Tab") {
             e.preventDefault();
             if (index === 0) return;
@@ -75,13 +84,18 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, true);
             }
-        } else if (typedChar === "Backspace") {
+        }
+        // Backtrack the charState on click of Backspace key
+        else if (typedChar === "Backspace") {
             if (index === 0) return;
             updatedState[index - 1].status = "normal";
             addCursor(index - 1, updatedState);
             setCurrIndex(index - 1);
             setCharState(updatedState);
-        } else if (!charToType) return;
+        }
+        // Ignore key press if any non essntial key is typed
+        else if (!charToType) return;
+        // Prevent moving forward until Enter is typed if keyToType is Enter
         else if (charToType === "\n") {
             if (typedChar === "Enter") {
                 addCursor(index + 1, updatedState);
@@ -93,7 +107,9 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, false);
             }
-        } else if (charToType === " ") {
+        }
+        // Prevent moving forward until ' ' is typed if keyToType is ' '
+        else if (charToType === " ") {
             if (typedChar === " ") {
                 addCursor(index + 1, updatedState);
                 setCurrIndex(index + 1);
@@ -104,10 +120,14 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 setCharState(updatedState);
                 trackTiming(currTimeRef.current, false);
             }
-        } else if (typedChar.length !== 1) {
+        }
+        // Ignore all the non essential key pressess
+        else if (typedChar.length !== 1) {
             addCursor(index, updatedState);
             setCharState(updatedState);
-        } else {
+        }
+        // Move the cursor agead while giving correct classnames to the previous character
+        else {
             updatedState[index].status =
                 typedChar === charToType ? "correct" : "inCorrect";
             addCursor(index + 1, updatedState);
@@ -115,7 +135,7 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
             setCharState(updatedState);
             trackTiming(currTimeRef.current, typedChar === charToType);
         }
-
+        // Finish the setIsCompleteSession which in turn will stop the test and display result
         if (index === updatedState.length - 2) {
             setIsSessionComplete(true);
         }
