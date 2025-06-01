@@ -40,6 +40,7 @@ function PerformanceChart({
 
     const labels = trackingArray.map((_, i) => `${i}s`);
     const avgWPM = [];
+    const rawWPM = [];
     const incorrectPoints = [];
     let totalCorrect = 0;
 
@@ -52,8 +53,10 @@ function PerformanceChart({
         const currCorrect = entry.correctChars;
         totalCorrect += currCorrect;
         const currAvgWPM = (totalCorrect / 5 / (i + 1)) * 60;
+        const currRawWPM = (entry.correctChars / 5) * 60;
 
         avgWPM.push(Number(currAvgWPM.toFixed(2)));
+        rawWPM.push(Number(currRawWPM.toFixed(2)));
 
         if (entry.inCorrectChars > 0) {
             incorrectPoints.push({
@@ -99,7 +102,15 @@ function PerformanceChart({
                 label: "Average",
                 data: avgWPM,
                 borderColor: "rgba(139, 92, 246, 1)",
-                backgroundColor: "rgba(139, 92, 246, 0.08)",
+                fill: false,
+                tension: 0.3,
+            },
+            {
+                label: "Raw",
+                data: rawWPM,
+                borderColor: "rgba(129, 129, 129, 0.5)",
+                backgroundColor: "rgba(139, 92, 246, 0.04)",
+                borderDash: [4, 5],
                 fill: true,
                 tension: 0.3,
             },
