@@ -23,6 +23,11 @@ function useTypingLogic(
     const trackTiming = useTrackingStore((state) => state.trackTiming);
 
     useEffect(() => {
+        // Reset timers and trackTiming array
+        clearInterval(intervalRef.current);
+        setCurrentTime(undefined);
+        currTimeRef.current = undefined;
+
         // Update random index if language.value changes or if language remains same but language.updatedAt changes
         if (
             prevLanguageRef.current !== language.value ||
@@ -60,7 +65,7 @@ function useTypingLogic(
             document.removeEventListener("mousedown", focusInput);
             clearInterval(intervalRef.current);
         };
-    }, [language, subLanguage]);
+    }, [language, subLanguage, timeThreshold]);
 
     // Integrate timer
     function startTimer() {
