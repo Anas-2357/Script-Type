@@ -34,7 +34,7 @@ function PerformanceChart({
     setAcceptanceRatio,
     setTime,
     setCorrectChars,
-    setInCorrectChars
+    setInCorrectChars,
 }) {
     const trackingArray = useTrackingStore((state) => state.trackingArray);
 

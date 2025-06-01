@@ -37,7 +37,9 @@ function Result() {
                     <p className="text-xl mb-4">Consistency</p>
                 </div>
                 <div>
-                    <p className="text-purple-500 text-5xl">{correctChars}/{inCorrectChars}</p>
+                    <p className="text-purple-500 text-5xl">
+                        {correctChars}/{inCorrectChars}
+                    </p>
                     <p className="text-xl">Charactors</p>
                 </div>
                 <div>

@@ -4,7 +4,13 @@ import { prepareCharState } from "../utils/parserUtils";
 import { addCursor, removeCursor } from "../utils/cursorUtils";
 import useTrackingStore from "../store/useTrackingStore";
 
-function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
+function useTypingLogic(
+    language,
+    subLanguage,
+    inputRef,
+    setIsSessionComplete,
+    timeThreshold
+) {
     const randomIndexRef = useRef(0);
     const prevLanguageRef = useRef(language);
     const [charState, setCharState] = useState([]);
@@ -43,14 +49,30 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
         };
     }, [language, subLanguage]);
 
-    // Integrate unlimited timer
+    // Integrate timer
     function startTimer() {
-        setCurrentTime(0);
-        currTimeRef.current = 0;
-        intervalRef.current = setInterval(() => {
-            setCurrentTime((prev) => prev + 1);
-            currTimeRef.current = currTimeRef.current + 1;
-        }, 1000);
+        // If timeThreshold is not null means a time is selected so start time with the selected value and decrease that every second until zero at which setIsSessionComlete to true
+        if (timeThreshold) {
+            setCurrentTime(timeThreshold);
+            currTimeRef.current = timeThreshold;
+            intervalRef.current = setInterval(() => {
+                setCurrentTime((prev) => prev - 1);
+                currTimeRef.current = currTimeRef.current - 1;
+                if (currTimeRef.current === 0) {
+                    console.log("time is <1");
+                    setIsSessionComplete(true);
+                }
+            }, 1000);
+        }
+        // Else start time from zero and increase it every second
+        else {
+            setCurrentTime(0);
+            currTimeRef.current = 0;
+            intervalRef.current = setInterval(() => {
+                setCurrentTime((prev) => prev + 1);
+                currTimeRef.current = currTimeRef.current + 1;
+            }, 1000);
+        }
     }
 
     function handleKeyDown(e) {
@@ -82,7 +104,7 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 addCursor(index, updatedState);
                 setCurrIndex(index);
                 setCharState(updatedState);
-                trackTiming(currTimeRef.current, true);
+                trackTiming(currTimeRef.current, true, timeThreshold);
             }
         }
         // Backtrack the charState on click of Backspace key
@@ -101,11 +123,11 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 addCursor(index + 1, updatedState);
                 setCurrIndex(index + 1);
                 setCharState(updatedState);
-                trackTiming(currTimeRef.current, true);
+                trackTiming(currTimeRef.current, true, timeThreshold);
             } else {
                 addCursor(index, updatedState);
                 setCharState(updatedState);
-                trackTiming(currTimeRef.current, false);
+                trackTiming(currTimeRef.current, false, timeThreshold);
             }
         }
         // Prevent moving forward until ' ' is typed if keyToType is ' '
@@ -114,11 +136,11 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
                 addCursor(index + 1, updatedState);
                 setCurrIndex(index + 1);
                 setCharState(updatedState);
-                trackTiming(currTimeRef.current, true);
+                trackTiming(currTimeRef.current, true, timeThreshold);
             } else {
                 addCursor(index, updatedState);
                 setCharState(updatedState);
-                trackTiming(currTimeRef.current, false);
+                trackTiming(currTimeRef.current, false, timeThreshold);
             }
         }
         // Ignore all the non essential key pressess
@@ -133,7 +155,11 @@ function useTypingLogic(language, subLanguage, inputRef, setIsSessionComplete) {
             addCursor(index + 1, updatedState);
             setCurrIndex(index + 1);
             setCharState(updatedState);
-            trackTiming(currTimeRef.current, typedChar === charToType);
+            trackTiming(
+                currTimeRef.current,
+                typedChar === charToType,
+                timeThreshold
+            );
         }
         // Finish the setIsCompleteSession which in turn will stop the test and display result
         if (index === updatedState.length - 2) {

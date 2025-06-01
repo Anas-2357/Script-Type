@@ -8,13 +8,19 @@ const classes = {
     blink: "border border-[1.5px] absolute translate-x-[-1px] h-[1.4em] animate-blink",
 };
 
-function TypingBox({ language, subLanguage, setIsSessionComplete }) {
+function TypingBox({
+    language,
+    subLanguage,
+    setIsSessionComplete,
+    timeThreshold,
+}) {
     const inputRef = useRef(null);
     const { charState, handleKeyDown, currentTime } = useTypingLogic(
         language,
         subLanguage,
-        inputRef, 
-        setIsSessionComplete
+        inputRef,
+        setIsSessionComplete,
+        timeThreshold
     );
 
     return (
